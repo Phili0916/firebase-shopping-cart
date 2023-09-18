@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
-    databaseURL: //Realtime databaseURL
+    databaseURL: //Realtime database URL
 }
 
 const app = initializeApp(appSettings)
@@ -23,12 +23,17 @@ addButtonElement.addEventListener("click", function() {
 })
 
 onValue(shoppingListInDB, function(snapshot) {
-    let snapshotItems = Object.values(snapshot.val())
+    let snapshotItems = Object.entries(snapshot.val())
     clearShoppingListEl()
 
-    snapshotItems.forEach((item) => {
-        addShoppingListEl(item)
-        console.log(item)
+    snapshotItems.forEach((snapshotItem) => {
+        let currentItem = snapshotItem
+        let currentItemId = currentItem[0]
+        let currentItemValue = currentItem[1]
+
+        console.log(currentItemValue)
+        addShoppingListEl(currentItem)
+        // console.log(currentItem)
     })
 })
 
@@ -40,6 +45,12 @@ function clearInputValue() {
     inputFieldElement.value = '';
 }
 
-function addShoppingListEl(itemValue) {
-    shoppingListElement.innerHTML += `<li>${itemValue}</li>`   
+function addShoppingListEl(item) {
+
+    let itemId = item[0]
+    let itemValue = item[1]
+    // shoppingListElement.innerHTML += `<li>${itemValue}</li>`   
+    let newShoppingListElement = document.createElement("li")
+    newShoppingListElement.textContent = itemValue
+    shoppingListElement.append(newShoppingListElement)
 }
